@@ -12,12 +12,12 @@ installed or written outside the script's directory.
 # Usage
 Clone the repository and run the `build.swift` script.
 ```
-$ git clone https://github.com/nickg-ca/ghidra_app.git
-$ cd ghidra_app
+$ git clone https://github.com/nickg-ca/Ghidra.app-builder.git
+$ cd Ghidra.app-builder
 $ ./build.swift
 ```
 
-At this point, you should have `Ghidra.app` in the `ghidra_app` directory.
+At this point, you should have `Ghidra.app` in the `Ghidra.app-builder` directory.
 
 The script will download Ghidra (currently version 10.0 beta which is the most
 recent at time of writing, 2021-06-07) and the Azul OpenJDK 11 binaries.

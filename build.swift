@@ -175,7 +175,7 @@ let plist = """
   "CFBundleDevelopmentRegion": "English",
   "CFBundleExecutable": "ghidra",
   "CFBundleIconFile": "ghidra.icns",
-  "CFBundleIdentifier": "local.\(hostname).ghidra_app",
+  "CFBundleIdentifier": "local.\(hostname).ghidra_dot_app",
   "CFBundleInfoDictionaryVersion": "6.0",
   "CFBundleName": "Ghidra",
   "CFBundlePackageType": "APPL",
