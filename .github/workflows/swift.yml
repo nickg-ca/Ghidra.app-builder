@@ -12,8 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-    - run: ./build.swift
-    - run: zip -r Ghidra.app.zip Ghidra.app
+      run: ./build.swift
+    - name: Zip
+      run: zip -r Ghidra.app.zip Ghidra.app
     - uses: actions/upload-artifact@v2
       with:
        name: my-artifact
