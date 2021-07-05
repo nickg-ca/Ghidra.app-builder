@@ -16,7 +16,7 @@ $ ./build.swift
 At this point, you should have `Ghidra.app` in the `Ghidra.app-builder` directory.
 
 The script will download Ghidra (currently version 10.0 which is the most
-recent at time of writing, 2021-07-04) and OpenJDK 17 binaries.
+recent at time of writing, 2021-07-04) and Azul Zulu JDK 11 binaries.
 
 I'm no longer building BinExport from BinDiff because the Ghidra plugin now included in the latest BinDiff.
 
