@@ -24,13 +24,19 @@ func platform() -> String {
 let arch = platform()
 print("Building for \(arch)")
 
-let ghidraUrl = URL(string: "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_10.0_build/ghidra_10.0_PUBLIC_20210621.zip")!
-let ghidraHash = "aaf84d14fb059beda10de9056e013186601962b6f87cd31161aaac57698a0f11"
-let ghidraPath = "ghidra_10.0_PUBLIC"
+let ghidraVersion = "10.0.3"
+let ghidraDate = "20210908"
+let ghidraUrl = URL(string: "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_\(ghidraVersion)_build/ghidra_\(ghidraVersion)_PUBLIC_\(ghidraDate).zip")!
+let ghidraHash = "1e1d363c18622b9477bddf0cc172ec55e56cac1416b332a5c53906a78eb87989"
+let ghidraPath = "ghidra_\(ghidraVersion)_PUBLIC"
 
-let jdkVersion = "zulu11.48.21-ca-jdk11.0.11"
-let jdkHash = arch == "intel" ? "866b25c47aa3bedddc57fbe38fd7d2e0f888d314b85d1e88b2fb12100f3c166c" :
-	"0c52621329b0d148c816b4c21e91386240bf57eb53ecfc4a6201f59ee983dc18"
+//Leaving this here in case I need to go back to JDK 11 for some reason
+//let jdkVersion = "zulu11.50.19-ca-jdk11.0.12"
+//let jdkHash = arch == "intel" ? "0b8c8b7cf89c7c55b7e2239b47201d704e8d2170884875b00f3103cf0662d6d7" :
+//	"e908a0b4c0da08d41c3e19230f819b364ff2e5f1dafd62d2cf991a85a34d3a17"
+let jdkVersion = "zulu16.32.15-ca-jdk16.0.2"
+let jdkHash = arch == "intel" ? "3578018ff2a2c5392768261ba3707eacea35d4d2261f90835085342e14c2b4ca" :
+	"ddb51f0dc2cbc9a84b7944450202c055aa41647beab5a9bc1876d64c0e8c4288"
 
 let jdkUrl = arch == "intel" ? URL(string: "https://cdn.azul.com/zulu/bin/\(jdkVersion)-macosx_x64.tar.gz")! :
        URL(string: "https://cdn.azul.com/zulu/bin/\(jdkVersion)-macosx_aarch64.tar.gz")!
@@ -40,11 +46,11 @@ let jdkPath = arch == "intel" ? "\(jdkVersion)-macosx_x64" :
 var urls = [ghidraUrl: ghidraHash,
 	jdkUrl: jdkHash]
 
-let gradleVersion = "gradle-7.1.1"
+let gradleVersion = "gradle-7.2"
 let gradleUrl = URL(string: "https://services.gradle.org/distributions/\(gradleVersion)-bin.zip")!
-let gradleHash = "bf8b869948901d422e9bb7d1fa61da6a6e19411baa7ad6ee929073df85d6365d"
-let ghidraSourceUrl = URL(string: "https://github.com/NationalSecurityAgency/ghidra/archive/refs/tags/Ghidra_10.0_build.zip")!
-let ghidraSourceHash = "6956e80835f5436566eef200112dfdddc37ab637169ada215ce0ce3541d1810b"
+let gradleHash = "f581709a9c35e9cb92e16f585d2c4bc99b2b1a5f85d2badbd3dc6bff59e1e6dd"
+let ghidraSourceUrl = URL(string: "https://github.com/NationalSecurityAgency/ghidra/archive/refs/tags/Ghidra_\(ghidraVersion)_build.zip")!
+let ghidraSourceHash = "4c67a316a1b5a73776f8cfbc3e1ae01d3d57ca515d0810d3823d90e985aa174c"
 if arch == "arm64" {
 	//For Apple Silicon I additionally rebuild the decompiler/sleigh so we get arm64 binaries
 	urls[ghidraSourceUrl] = ghidraSourceHash
@@ -127,9 +133,9 @@ func noOutSystem(_ executable: String, _ arguments: [String]? = [], _ environmen
 	process.arguments = arguments
 	process.qualityOfService = .background
 	process.executableURL = URL(fileURLWithPath: executable)
-	process.standardOutput = nil
+	process.standardOutput = FileHandle.standardOutput
 	process.standardInput = nil
-	process.standardError = nil
+	process.standardError = FileHandle.standardError
 	if environment != nil && process.environment != nil {
 		for (variable, value) in environment! {
 			process.environment![variable] = value
@@ -156,10 +162,9 @@ func System(_ executable: String, _ arguments: [String]? = [], _ environment: [S
 	process.qualityOfService = .background
 	process.executableURL = URL(fileURLWithPath: executable)
 	let standardOutput = Pipe()
-	let standardError = Pipe()
 	process.standardOutput = standardOutput
 	process.standardInput = nil
-	process.standardError = standardError
+	process.standardError = FileHandle.standardError
 	if environment != nil && process.environment != nil {
 		for (variable, value) in environment! {
 			process.environment![variable] = value
@@ -178,10 +183,6 @@ func System(_ executable: String, _ arguments: [String]? = [], _ environment: [S
 		print("Error running process \(executable):")
 		print(error.localizedDescription)
 		exit(1)
-	}
-	let errorOutput = String(decoding: standardError.fileHandleForReading.availableData, as: UTF8.self)
-	if errorOutput != "" {
-		print("Process \(executable) error output:\n\(errorOutput)")
 	}
 	let output = String(decoding: standardOutput.fileHandleForReading.availableData, as: UTF8.self)
 	if output == "" {
@@ -245,7 +246,7 @@ if arch == "intel" {
 let _ = System("/usr/bin/unzip", ["-ouqq", "cache/\(urls[gradleUrl]!)", "-d", "cache/gradle"])
 let _ = System("/usr/bin/unzip", ["-ouqq", "cache/\(urls[ghidraSourceUrl]!)", "-d", "cache/ghidraSource"])
 
-let ghidraSourceDir = "cache/ghidraSource/ghidra-Ghidra_10.0_build"
+let ghidraSourceDir = "cache/ghidraSource/ghidra-Ghidra_\(ghidraVersion)_build"
 
 let pwd = FileManager.default.currentDirectoryPath
 if !FileManager.default.changeCurrentDirectoryPath("\(pwd)/\(ghidraSourceDir)") {
@@ -257,6 +258,7 @@ let newpwd = FileManager.default.currentDirectoryPath
 print("\(newpwd)")
 
 setenv("JAVA_HOME","\(pwd)/Ghidra.app/Contents/Resources/\(jdkPath)",1)
+setenv("GRADLE_OPTIONS","-XX:+TieredCompilation -XX:TieredStopAtLevel=1",1)
 
 print("Installing Ghidra dependencies (this might take a while)")
 let _ = noOutSystem("\(pwd)/cache/gradle/\(gradleVersion)/bin/gradle",
@@ -264,10 +266,13 @@ let _ = noOutSystem("\(pwd)/cache/gradle/\(gradleVersion)/bin/gradle",
 print("Building native decompile/sleigh (this will take a while)")
 let _ = noOutSystem("\(pwd)/cache/gradle/\(gradleVersion)/bin/gradle",
 	["-q", "-i", "buildNatives_osx64"])
+// TODO: change to this once the new build system currently in master is released
+//	["-q", "-i", "buildNatives_mac_\(arch == "intel" ? "x86_64" : "arm_64" )"])
+
 print("Native binaries built, copying")
-let decompileDest = "\(pwd)/Ghidra.app/Contents/Resources/ghidra_10.0_PUBLIC/Ghidra/Features/Decompiler/os/osx64/decompile"
+let decompileDest = "\(pwd)/Ghidra.app/Contents/Resources/ghidra_\(ghidraVersion)_PUBLIC/Ghidra/Features/Decompiler/os/osx64/decompile"
 try! FileManager.default.removeItem(at: URL(fileURLWithPath:decompileDest))
-let sleighDest = "\(pwd)/Ghidra.app/Contents/Resources/ghidra_10.0_PUBLIC/Ghidra/Features/Decompiler/os/osx64/sleigh"
+let sleighDest = "\(pwd)/Ghidra.app/Contents/Resources/ghidra_\(ghidraVersion)_PUBLIC/Ghidra/Features/Decompiler/os/osx64/sleigh"
 try! FileManager.default.removeItem(at: URL(fileURLWithPath:sleighDest))
 try! FileManager.default.copyItem(atPath: "\(newpwd)/Ghidra/Features/Decompiler/build/os/osx64/decompile", toPath: decompileDest)
 try! FileManager.default.copyItem(atPath: "\(newpwd)/Ghidra/Features/Decompiler/build/os/osx64/sleigh", toPath: sleighDest)
