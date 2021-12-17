@@ -15,14 +15,14 @@ $ ./build.swift
 
 At this point, you should have `Ghidra.app` in the `Ghidra.app-builder` directory.
 
-The script will download Ghidra (currently version 10.0 which is the most
-recent at time of writing, 2021-07-04) and Azul Zulu JDK 11 binaries.
+The script will download Ghidra (currently version 10.1 which is the most
+recent at time of writing, 2021-12-16) and Azul Zulu JDK 17 binaries.
 
-I'm no longer building BinExport from BinDiff because the Ghidra plugin now included in the latest BinDiff.
+I'm no longer building BinExport from BinDiff because the Ghidra plugin is now included in the latest BinDiff.
 
 The downloads will be cached for future use in the `cache` directory. You may
 delete this directory after building if you wish.
 
 # Apple Silicon decompile/sleigh
 
-On an arm64 mac the script will also download a few extra things and recompile the decompile/sleigh binaries to target arm64. This worked on my machine, but I haven't tested it very much so you might wish to remove that bit if you run into issues, and wait for the NSA to implement something themselves.
+On an arm64 mac the script will also download Gradle and recompile the decompile/sleigh binaries to target arm64.
