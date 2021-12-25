@@ -1,3 +1,5 @@
+[![Swift](https://github.com/nickg-ca/Ghidra.app-builder/actions/workflows/swift.yml/badge.svg)](https://github.com/nickg-ca/Ghidra.app-builder/actions/workflows/swift.yml)
+
 Simple script to create a packaged version of Ghidra, including Apple Silicon support.
 
 # Dependencies
