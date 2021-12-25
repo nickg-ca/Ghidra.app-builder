@@ -24,16 +24,12 @@ func platform() -> String {
 let arch = platform()
 print("Building for \(arch)")
 
-let ghidraVersion = "10.1"
-let ghidraDate = "20211210"
+let ghidraVersion = "10.1.1"
+let ghidraDate = "20211221"
 let ghidraUrl = URL(string: "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_\(ghidraVersion)_build/ghidra_\(ghidraVersion)_PUBLIC_\(ghidraDate).zip")!
-let ghidraHash = "99139c4a63a81135b3b63fe9997a012a6394a766c2c7f2ac5115ab53912d2a6c"
+let ghidraHash = "d4ee61ed669cec7e20748462f57f011b84b1e8777b327704f1646c0d47a5a0e8"
 let ghidraPath = "ghidra_\(ghidraVersion)_PUBLIC"
 
-//Leaving this here in case I need to go back to JDK 11 for some reason
-//let jdkVersion = "zulu11.50.19-ca-jdk11.0.12"
-//let jdkHash = arch == "intel" ? "0b8c8b7cf89c7c55b7e2239b47201d704e8d2170884875b00f3103cf0662d6d7" :
-//	"e908a0b4c0da08d41c3e19230f819b364ff2e5f1dafd62d2cf991a85a34d3a17"
 let jdkVersion = "zulu17.30.15-ca-jdk17.0.1"
 let jdkHash = arch == "intel" ? "09d64fe576373b4314422811bc8402fbb7700176822b0e1e2bf2ff8a6cad10eb" :
 	"ce10425ce9cefdfb23ebeabebc0944cfb41531114a2d5bd89e3c19cc5cfa9913"
@@ -46,14 +42,12 @@ let jdkPath = arch == "intel" ? "\(jdkVersion)-macosx_x64" :
 var urls = [ghidraUrl: ghidraHash,
 	jdkUrl: jdkHash]
 
-let gradleVersion = "gradle-7.3.2"
+let gradleVersion = "gradle-7.3.3"
 let gradleUrl = URL(string: "https://services.gradle.org/distributions/\(gradleVersion)-bin.zip")!
-let gradleHash = "23b89f8eac363f5f4b8336e0530c7295c55b728a9caa5268fdd4a532610d5392"
-let ghidraSourceUrl = URL(string: "https://github.com/NationalSecurityAgency/ghidra/archive/refs/tags/Ghidra_\(ghidraVersion)_build.zip")!
-let ghidraSourceHash = "4c67a316a1b5a73776f8cfbc3e1ae01d3d57ca515d0810d3823d90e985aa174c"
+let gradleHash = "b586e04868a22fd817c8971330fec37e298f3242eb85c374181b12d637f80302"
 if arch == "arm64" {
-	//For Apple Silicon I additionally rebuild the decompiler/sleigh so we get arm64 binaries
-	//urls[ghidraSourceUrl] = ghidraSourceHash
+	// For Apple Silicon I additionally rebuild the decompiler/sleigh so we get arm64 binaries,
+	// and I need gradle for this.
 	urls[gradleUrl] = gradleHash
 }
 
