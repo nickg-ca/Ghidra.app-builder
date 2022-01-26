@@ -27,7 +27,7 @@ print("Building for \(arch)")
 let ghidraVersion = "10.1.2"
 let ghidraDate = "20220125"
 let ghidraUrl = URL(string: "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_\(ghidraVersion)_build/ghidra_\(ghidraVersion)_PUBLIC_\(ghidraDate).zip")!
-let ghidraHash = "64860a83d53aca19001d0026e5daf7db05218942dcbbf1ef0b1638242a09b8f6"
+let ghidraHash = "ac96fbdde7f754e0eb9ed51db020e77208cdb12cf58c08657a2ab87cb2694940"
 let ghidraPath = "ghidra_\(ghidraVersion)_PUBLIC"
 
 let jdkVersion = "zulu17.32.13-ca-jdk17.0.2"
