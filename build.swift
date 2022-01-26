@@ -24,15 +24,15 @@ func platform() -> String {
 let arch = platform()
 print("Building for \(arch)")
 
-let ghidraVersion = "10.1.1"
-let ghidraDate = "20211221"
+let ghidraVersion = "10.1.2"
+let ghidraDate = "20220125"
 let ghidraUrl = URL(string: "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_\(ghidraVersion)_build/ghidra_\(ghidraVersion)_PUBLIC_\(ghidraDate).zip")!
-let ghidraHash = "d4ee61ed669cec7e20748462f57f011b84b1e8777b327704f1646c0d47a5a0e8"
+let ghidraHash = "64860a83d53aca19001d0026e5daf7db05218942dcbbf1ef0b1638242a09b8f6"
 let ghidraPath = "ghidra_\(ghidraVersion)_PUBLIC"
 
-let jdkVersion = "zulu17.30.15-ca-jdk17.0.1"
-let jdkHash = arch == "intel" ? "09d64fe576373b4314422811bc8402fbb7700176822b0e1e2bf2ff8a6cad10eb" :
-	"ce10425ce9cefdfb23ebeabebc0944cfb41531114a2d5bd89e3c19cc5cfa9913"
+let jdkVersion = "zulu17.32.13-ca-jdk17.0.2"
+let jdkHash = arch == "intel" ? "89d04b2d99b05dcb25114178e65f6a1c5ca742e125cab0a63d87e7e42f3fcb80" :
+	"54247dde248ffbcd3c048675504b1c503b81daf2dc0d64a79e353c48d383c977"
 
 let jdkUrl = arch == "intel" ? URL(string: "https://cdn.azul.com/zulu/bin/\(jdkVersion)-macosx_x64.tar.gz")! :
        URL(string: "https://cdn.azul.com/zulu/bin/\(jdkVersion)-macosx_aarch64.tar.gz")!
