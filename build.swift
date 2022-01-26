@@ -276,6 +276,6 @@ print("Setting PATH=\(newPath)")
 setenv("PATH",newPath,1)
 
 print("Building for ARM64")
-let _ = noOutSystem("\(ghidraDir)/support/buildNatives",[])
+let _ = noOutSystem("\(ghidraDir)/support/buildNatives",["--no-daemon"])
 print("Native binaries built, all done")
 
