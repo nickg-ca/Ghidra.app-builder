@@ -24,15 +24,15 @@ func platform() -> String {
 let arch = platform()
 print("Building for \(arch)")
 
-let ghidraVersion = "10.1.2"
-let ghidraDate = "20220125"
+let ghidraVersion = "10.1.4"
+let ghidraDate = "20220519"
 let ghidraUrl = URL(string: "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_\(ghidraVersion)_build/ghidra_\(ghidraVersion)_PUBLIC_\(ghidraDate).zip")!
-let ghidraHash = "ac96fbdde7f754e0eb9ed51db020e77208cdb12cf58c08657a2ab87cb2694940"
+let ghidraHash = "91556c77c7b00f376ca101a6026c0d079efbf24a35b09daaf80bda897318c1f1"
 let ghidraPath = "ghidra_\(ghidraVersion)_PUBLIC"
 
-let jdkVersion = "zulu17.32.13-ca-jdk17.0.2"
-let jdkHash = arch == "intel" ? "89d04b2d99b05dcb25114178e65f6a1c5ca742e125cab0a63d87e7e42f3fcb80" :
-	"54247dde248ffbcd3c048675504b1c503b81daf2dc0d64a79e353c48d383c977"
+let jdkVersion = "zulu17.34.19-ca-jdk17.0.3"
+let jdkHash = arch == "intel" ? "a889b2c550b6cb6421c6e559c1a98a3f2a38ebe9feef2b48157a582347bac367" :
+	"79a457f106bf32aafd261a4748471fd10f5ce2a9aa2cc816a91864104c008dff"
 
 let jdkUrl = arch == "intel" ? URL(string: "https://cdn.azul.com/zulu/bin/\(jdkVersion)-macosx_x64.tar.gz")! :
        URL(string: "https://cdn.azul.com/zulu/bin/\(jdkVersion)-macosx_aarch64.tar.gz")!
@@ -42,7 +42,7 @@ let jdkPath = arch == "intel" ? "\(jdkVersion)-macosx_x64" :
 var urls = [ghidraUrl: ghidraHash,
 	jdkUrl: jdkHash]
 
-let gradleVersion = "gradle-7.3.3"
+let gradleVersion = "gradle-7.4.2"
 let gradleUrl = URL(string: "https://services.gradle.org/distributions/\(gradleVersion)-bin.zip")!
 let gradleHash = "b586e04868a22fd817c8971330fec37e298f3242eb85c374181b12d637f80302"
 if arch == "arm64" {
