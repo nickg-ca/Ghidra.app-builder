@@ -2,12 +2,12 @@ name: Swift
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: macos-12
 
     steps:
     - uses: actions/checkout@v2
