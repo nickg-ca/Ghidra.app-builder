@@ -1,6 +1,4 @@
-[![Swift](https://github.com/nickg-ca/Ghidra.app-builder/actions/workflows/swift.yml/badge.svg)](https://github.com/nickg-ca/Ghidra.app-builder/actions/workflows/swift.yml)
-
-Simple script to create a packaged version of Ghidra, including Apple Silicon support.
+Simple script to create a packaged version of Ghidra for Apple Silicon Macs.
 
 # Dependencies
 Probably the Xcode command line tools for git, but the script downloads
@@ -17,10 +15,9 @@ $ ./build.sh
 
 At this point, you should have `Ghidra.app` in the `Ghidra.app-builder` directory.
 
-The script will download Ghidra (currently version 10.2 which is the most
-recent at time of writing, 2022-11-14) and Azul Zulu JDK 17 binaries.
-
-I'm also building BinExport.
+The script will download the latest stable Ghidra and Adoptium Temurin JDK 21
+binaries. It also builds BinExport.
 
 The downloads will be cached for future use in the `cache` directory. You may
-delete this directory after building if you wish.
+delete this directory after building if you wish. The script won't reuse the
+downloads.
