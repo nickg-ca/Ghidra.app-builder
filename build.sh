@@ -16,10 +16,11 @@ echo "Building for $ARCH"
 
 curl -L "https://github.com/NationalSecurityAgency/ghidra/archive/refs/heads/stable.zip" -o cache/ghidra-stable.zip
 
-JDK_VERSION="zulu17.38.21-ca-jdk17.0.5"
-curl -L "https://cdn.azul.com/zulu/bin/$JDK_VERSION-$JDK_PLATFORM.tar.gz" -o cache/jdk.tgz
+JDK_VERSION="21.0.5+11"
+JDK_VERSION_ESCAPED=$(echo $JDK_VERSION | sed "s/\+/_/g")
+curl -L "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-$JDK_VERSION/OpenJDK21U-jdk_aarch64_mac_hotspot_$JDK_VERSION_ESCAPED.tar.gz" -o cache/jdk.tgz
 
-GRADLE_VERSION="gradle-7.5.1"
+GRADLE_VERSION="gradle-8.10.2"
 curl -L "https://services.gradle.org/distributions/$GRADLE_VERSION-bin.zip" -o cache/gradle.zip
 
 curl -L "https://github.com/google/binexport/archive/refs/heads/main.zip" -o cache/binexport.zip
@@ -29,19 +30,19 @@ mkdir -p Ghidra.app/Contents/Resources
 cp ghidra.icns Ghidra.app/Contents/Resources/ghidra.icns
 
 
-/usr/bin/swiftc ghidra.swift -o Ghidra.app/Contents/MacOS/ghidra
+/usr/bin/swiftc -O ghidra.swift -o Ghidra.app/Contents/MacOS/ghidra
 
 /usr/bin/unzip -ouqq cache/binexport.zip -d cache
 /usr/bin/unzip -ouqq cache/gradle.zip -d cache/gradle
 /usr/bin/unzip -ouqq cache/ghidra-stable.zip -d cache
 /usr/bin/tar Jxf cache/jdk.tgz -C Ghidra.app/Contents/Resources
 
-export JAVA_HOME="`pwd`/Ghidra.app/Contents/Resources/$JDK_VERSION-$JDK_PLATFORM"
+export JAVA_HOME="`pwd`/Ghidra.app/Contents/Resources/jdk-$JDK_VERSION/Contents/Home"
 export GRADLE_OPTIONS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 export PATH=$PATH:`pwd`/cache/gradle/$GRADLE_VERSION/bin
 
 cd cache/ghidra-stable
-gradle -I gradle/support/fetchDependencies.gradle init --no-daemon
+gradle -I gradle/support/fetchDependencies.gradle --no-daemon
 gradle buildGhidra --no-daemon
 
 cd ../..
@@ -52,7 +53,7 @@ GHIDRA_PATH=`ls Ghidra.app/Contents/Resources | grep ghidra_`
 export GHIDRA_INSTALL_DIR=$(pwd)/Ghidra.app/Contents/Resources/$GHIDRA_PATH
 
 cd cache/binexport-main/java
-gradle --no-daemon
+gradle --no-daemon -P"java.toolchain.languageVersion=JavaLanguageVersion.of(21)"
 cd ../../..
 mv cache/binexport-main/java/dist/*.zip $GHIDRA_INSTALL_DIR/Extensions/Ghidra
 
@@ -81,7 +82,7 @@ if [ ! \$INTEL = $PLATFORM_CHECK ]; then
         exit
 fi
 ROOT_DIR=\`dirname \$0\`/../../
-export JAVA_HOME="\$ROOT_DIR/Contents/Resources/$JDK_VERSION-$JDK_PLATFORM"
+export JAVA_HOME="\$ROOT_DIR/Contents/Resources/jdk-$JDK_VERSION/Contents/Home"
 export PATH="\${JAVA_HOME}/bin:\${PATH}"
 export MAXMEM=\$((\$(sysctl -n hw.memsize)/1024/1024/1024))G
 exec "\$ROOT_DIR/Contents/Resources/$GHIDRA_PATH/ghidraRun"
