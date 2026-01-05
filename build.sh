@@ -16,11 +16,11 @@ echo "Building for $ARCH"
 
 curl -L "https://github.com/NationalSecurityAgency/ghidra/archive/refs/heads/stable.zip" -o cache/ghidra-stable.zip
 
-JDK_VERSION="21.0.5+11"
+JDK_VERSION="21.0.9+10"
 JDK_VERSION_ESCAPED=$(echo $JDK_VERSION | sed "s/\+/_/g")
 curl -L "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-$JDK_VERSION/OpenJDK21U-jdk_aarch64_mac_hotspot_$JDK_VERSION_ESCAPED.tar.gz" -o cache/jdk.tgz
 
-GRADLE_VERSION="gradle-8.10.2"
+GRADLE_VERSION="gradle-9.2.1"
 curl -L "https://services.gradle.org/distributions/$GRADLE_VERSION-bin.zip" -o cache/gradle.zip
 
 curl -L "https://github.com/google/binexport/archive/refs/heads/main.zip" -o cache/binexport.zip
