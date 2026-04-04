@@ -89,4 +89,12 @@ exec "\$ROOT_DIR/Contents/Resources/$GHIDRA_PATH/ghidraRun"
 EOF
 
 chmod +x Ghidra.app/Contents/Resources/ghidra.sh
+
+# Build ghidra-mcp (Rust MCP server for AI-controlled Ghidra)
+cd ghidra-mcp
+cargo build --release
+cd ..
+cp ghidra-mcp/target/release/ghidra-mcp Ghidra.app/Contents/MacOS/ghidra-mcp
+cp ghidra-mcp/scripts/McpBridge.java $GHIDRA_INSTALL_DIR/Ghidra/Features/Base/ghidra_scripts/McpBridge.java
+
 codesign --force --deep -s - Ghidra.app

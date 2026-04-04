@@ -5,6 +5,8 @@ Probably the Xcode command line tools for git, but the script downloads
 everything else it needs like a Java runtime. Nothing is intentionally
 installed or written outside the script's directory.
 
+Building `ghidra-mcp` also requires a [Rust toolchain](https://rustup.rs/).
+
 # Usage
 Clone the repository and run the `build.sh` script.
 ```
@@ -16,8 +18,30 @@ $ ./build.sh
 At this point, you should have `Ghidra.app` in the `Ghidra.app-builder` directory.
 
 The script will download the latest stable Ghidra and Adoptium Temurin JDK 21
-binaries. It also builds BinExport.
+binaries. It also builds BinExport and ghidra-mcp.
 
 The downloads will be cached for future use in the `cache` directory. You may
 delete this directory after building if you wish. The script won't reuse the
 downloads.
+
+# ghidra-mcp
+
+`ghidra-mcp` is an MCP server that lets an AI control Ghidra for reverse
+engineering. It's built as part of `Ghidra.app` and lives at
+`Ghidra.app/Contents/MacOS/ghidra-mcp`.
+
+## Configuring as an MCP server
+
+
+```json
+{
+  "mcpServers": {
+    "ghidra": {
+      "command": "/path/to/Ghidra.app/Contents/MacOS/ghidra-mcp"
+    }
+  }
+}
+```
+
+Replace `/path/to/` with the actual path to your built `Ghidra.app`.
+
